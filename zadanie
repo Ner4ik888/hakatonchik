@@ -1,0 +1,68 @@
+import random
+
+print("Жил пацан и его как-то звали, однажды он пришел в школу и его ждали его враги Гриша и Гульнара Айратовна")
+def cls():
+    print("")
+def pauza():
+    input("Нажмите Enter")
+
+def status(p_name, p_hp, p_mana, m_name, m_hp):
+    print(f"\n{p_name}: HP {p_hp}, Mana {p_mana}  --  {m_name}: HP {m_hp}")
+
+def vibrat_monstra():
+    print("1. Гриша (Слабость)")
+    print("2. Гульнара Айратовна (Мега ультра сложный босс)")
+    c = input("Выберите: ")
+    if c == "1": return "Гриша", 50, 10
+    else: return "Гульнара Айратовна", 100, 19
+
+def player_attack(p_hp, p_mana, m_hp):
+    print("1. Чеченский палец (10 dmg, 0 mana)")
+    print("2. Ударить с ноги (20 dmg, 10 mana)")
+    c = input("Атака: ")
+    if c == "2" and p_mana < 10:
+        print("Маны была но закончилась!")
+        return p_hp, p_mana, m_hp
+
+    dmg = 10 if c == "1" else 20
+    mana_cost = 0 if c == "1" else 10
+    dmg = random.randint(dmg-3, dmg+3)
+    p_mana -= mana_cost
+    m_hp -= dmg
+    print(f"Урон: {dmg}!")
+    return p_hp, p_mana, m_hp
+
+def monster_attack(p_hp, m_name, m_dmg):
+    dmg = random.randint(m_dmg-2, m_dmg+2)
+    p_hp -= dmg
+    print(f"{m_name} избивает ногами и руками на столько хп {dmg}!")
+    return p_hp
+
+def game():
+    cls()
+    p_name = input("Как звали того пацанчика: ")
+    p_hp, p_mana = 100, 79
+    m_name, m_hp, m_dmg = vibrat_monstra()
+
+    while p_hp > 0 and m_hp > 0:
+        cls()
+        status(p_name, p_hp, p_mana, m_name, m_hp)
+        p_hp, p_mana, m_hp = player_attack(p_hp, p_mana, m_hp)
+
+        if m_hp <= 0:
+            print(f"Победа над {m_name}!")
+            break
+
+        pauza()
+        p_hp = monster_attack(p_hp, m_name, m_dmg)
+
+        if p_hp <= 0:
+            print("Ты проиграл")
+            break
+
+        pauza()
+
+    print("Тебя отчислили поздравляю")
+
+if __name__ == "__main__":
+    game()
